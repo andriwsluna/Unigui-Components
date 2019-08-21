@@ -10,10 +10,15 @@ For comercial use, buy it.
 
 --How to install?
 1.Open the project with the Delphi IDE and install it;
+
 2.Go to Tools->Options;
+
 3.Go to Environment options->Delphi Options->Library;
+
 4.In Library path add the project "source" folder;
+
 5.Comment the line with "AddPortugueseTraduction;" in unit uEchoHightChart;
+
 6.See the "InitializeObjects" method for replace or comment the code which translates the multiples of a thousand;
 
 
