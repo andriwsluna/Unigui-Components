@@ -2157,7 +2157,7 @@ Type
 
 
     Function getHighChartPath : string;
-
+    procedure setHighChartPath(V : string);
 
     Procedure AddJsfiles;
 
@@ -2198,7 +2198,7 @@ Type
     property TabStop;
 
 
-    Property HighChartPath : string read FHighChartPath write FHighChartPath;
+    Property HighChartPath : string read FHighChartPath write setHighChartPath;
     Property HTMLScriptMode : TEchoHightScriptMode read FHTMLScriptMode write  FHTMLScriptMode;
     Property JavasScriptMode : TEchoHightScriptMode read FJavasScriptMode write  FJavasScriptMode;
 
@@ -2490,6 +2490,12 @@ end;
 
 procedure TEchoHightChart.ONCustomCSSChange(Sender: TObject);
 begin
+  GenerateHTML;
+end;
+
+procedure TEchoHightChart.setHighChartPath(V: string);
+begin
+  FHighChartPath := V;
   GenerateHTML;
 end;
 
