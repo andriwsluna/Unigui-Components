@@ -52,7 +52,8 @@ For comercial use, buy it.
 
 
 --Como usar?
-0.Baixar e etrar os arquivos da pasta Highcharts na pasta principal da sua aplicação;
+
+0.Baixar e extrair os arquivos da pasta Highcharts na pasta principal da sua aplicação;
 
 1.Solte um "TEchoHightChart" na tela e ajuste seu tamanho e alinhamento.
 
