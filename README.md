@@ -1,6 +1,7 @@
 # Unigui-Components
 
 Highcharts API docs: https://api.highcharts.com/highcharts/xAxis
+
 Download zip files: https://www.highcharts.com/blog/download/
 
 For comercial use, buy it.
@@ -9,7 +10,6 @@ For comercial use, buy it.
 
 --How to install?
 1.Open the project with the Delphi IDE and install it;
-
 2.Go to Tools->Options;
 
 3.Go to Environment options->Delphi Options->Library;
