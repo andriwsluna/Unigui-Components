@@ -3,7 +3,7 @@
 Highcharts API docs: https://api.highcharts.com/highcharts/xAxis
 Download zip files: https://www.highcharts.com/blog/download/
 
-For comercial use, please buy it.
+For comercial use, buy it.
 
 [English]
 
