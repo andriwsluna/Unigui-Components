@@ -25,19 +25,18 @@ For comercial use, please buy it.
 
 
 
-
 [Portuguese]
 
 --Como instalar?
 1.Abra o projeto com a IDE do Delphi e instale-o;
-2.V· para Tools->Options;
-3.V· para Environment options->Delphi Options->Library;
+2.V√° para Tools->Options;
+3.V√° para Environment options->Delphi Options->Library;
 4.Em Library path adicione a pasta "source "do projeto;
 
 --Como usar?
-0.Baixar e etrar os arquivos da pasta Highcharts na pasta principal da sua aplicaÁ„o;
+0.Baixar e etrar os arquivos da pasta Highcharts na pasta principal da sua aplica√ß√£o;
 1.Solte um "TEchoHightChart" na tela e ajuste seu tamanho e alinhamento.
 2.Acesse as propriedades da seguinte forma:
     "HighChartOptions.PropertyName.Value := newValue;"
     Ex: EchoHightChart1.HighChartOptions.title.text.Value := 'Introduction';
-3.Pasra processar o gr·fico utilize o mÈtodo "Load";
+3.Pasra processar o gr√°fico utilize o m√©todo "Load";
