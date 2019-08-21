@@ -6,7 +6,7 @@ Download zip files: https://www.highcharts.com/blog/download/
 
 For comercial use, buy it.
 
-[English]
+# [English]
 
 --How to install?
 1.Open the project with the Delphi IDE and install it;
@@ -38,7 +38,7 @@ For comercial use, buy it.
 
 
 
-[Portuguese]
+# [Portuguese]
 
 --Como instalar?
 
