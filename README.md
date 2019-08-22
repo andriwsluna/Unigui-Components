@@ -1,6 +1,6 @@
 # Unigui-Components
 
-Highcharts API docs: https://api.highcharts.com/highcharts/xAxis
+Highcharts API docs: https://api.highcharts.com/highcharts/
 
 Download zip files: https://www.highcharts.com/blog/download/
 
