@@ -56,12 +56,12 @@ end;
 procedure TMainForm.UniFormCreate(Sender: TObject);
 begin
   EchoHightChart1.HighChartOptions.chart.type_.Value := tpArea;
-  EchoHightChart1.HighChartOptions.title.text.Value := 'Introduction';
-  EchoHightChart1.HighChartOptions.series.Datasource.DataSet := FDMemTable1;
-  EchoHightChart1.HighChartOptions.series.List.FieldNameForSerie := 'Operation';
-  EchoHightChart1.HighChartOptions.series.List.FieldNameForX  := 'month';
-  EchoHightChart1.HighChartOptions.series.List.FieldNameForY  := 'value';
-  EchoHightChart1.Load;
+EchoHightChart1.HighChartOptions.title.text.Value := 'Introduction';
+EchoHightChart1.HighChartOptions.series.Datasource.DataSet := FDMemTable1;
+EchoHightChart1.HighChartOptions.series.List.FieldNameForSerie := 'Operation';
+EchoHightChart1.HighChartOptions.series.List.FieldNameForX  := 'month';
+EchoHightChart1.HighChartOptions.series.List.FieldNameForY  := 'value';
+EchoHightChart1.Load;
 end;
 
 initialization
