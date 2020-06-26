@@ -453,6 +453,7 @@ Type
     Fenabled              : THighBoolean;
     FfollowPointer        : THighBoolean;
     FfollowTouchMove      : THighBoolean;
+    FfooterFormat         : THighString;
     Fformatter            : THighGeneric;
     FheaderFormat         : THighString;
     FheaderShape          : THighGeneric;
@@ -489,6 +490,7 @@ Type
     Property enabled              : THighBoolean read  Fenabled;
     Property followPointer        : THighBoolean read  FfollowPointer;
     Property followTouchMove      : THighBoolean read  FfollowTouchMove;
+    Property footerFormat        : THighString  read FfooterFormat;
     Property formatter            : THighGeneric read  Fformatter;
     Property headerFormat         : THighString read  FheaderFormat;
     Property headerShape          : THighGeneric read  FheaderShape;
@@ -1044,6 +1046,7 @@ Type
   protected
     Function getGenerate : Boolean; Virtual;
     Procedure CreateObjects; Override;
+    Procedure DestroyObjects; Override;
     Procedure AddValue(SL : TStrings); Override;
   Public
     Property Axis : TObjectList<TXAxisOption> read FAxis;
@@ -1055,6 +1058,7 @@ Type
   protected
     Function getGenerate : Boolean; Virtual;
     Procedure CreateObjects; Override;
+    Procedure DestroyObjects; Override;
     Procedure AddValue(SL : TStrings); Override;
   Public
     Property Axis : TObjectList<TYAxisOption> read FAxis;
@@ -1882,6 +1886,7 @@ Type
     Frules  : THighResponsiveRules;
   protected
     Procedure CreateObjects;    Override;
+    Procedure DestroyObjects;    Override;
   Public
     property rules  : THighResponsiveRules read Frules;
 
@@ -2031,6 +2036,7 @@ Type
     Procedure setChartMode(V : THighChartModeValue);
   protected
     Procedure CreateObjects; Override;
+    Procedure DestroyObjects; Override;
     Procedure InitializeObjects; Override;
 
     Procedure LoadSeriesFromDataset;
@@ -2092,6 +2098,7 @@ Type
 
   PROTECTED
     Procedure CreateObjects; Override;
+    Procedure DestroyObjects; Override;
     Procedure InitializeObjects; Override;
 
   public
@@ -2367,6 +2374,10 @@ end;
 destructor TEchoHightChart.Destroy;
 begin
   FHTML.Free;
+  FJS.Free;
+  FModules.Free;
+  FCustomCSS.Free;
+  FHighChartOptions.Free;
   inherited;
 end;
 
@@ -2544,6 +2555,12 @@ begin
   Flegend           := THighLegend.create(Self);
 end;
 
+
+
+procedure THighChartOptions.DestroyObjects;
+begin
+  inherited;
+end;
 
 function THighChartOptions.getDataset: Tdataset;
 begin
@@ -2724,6 +2741,7 @@ begin
   Fenabled              := THighBoolean.Create(Self);
   FfollowPointer        := THighBoolean.Create(Self);
   FfollowTouchMove      := THighBoolean.Create(Self);
+  FfooterFormat         := THighString.Create(Self);
   Fformatter            := THighGeneric.Create(Self);
   FheaderFormat         := THighString.Create(Self);
   FheaderShape          := THighGeneric.Create(Self);
@@ -2747,7 +2765,6 @@ begin
   FvalueSuffix          := THighString.Create(Self);
   FxDateFormat          := THighString.Create(Self);
 end;
-
 
 
 
@@ -2848,7 +2865,7 @@ begin
 
   inherited create;
   Generate := False;
-  ChildList := TObjectList<THighValue>.Create(true);
+  ChildList := TObjectList<THighValue>.Create(False);
   CreateObjects;
   InitializeObjects;
   UpdateVariableNames;
@@ -2866,21 +2883,75 @@ VAR
   Classe    : TRttiType;
   Field    : TRttiField;
   obj   : THighValue;
+  mode : THighChartMode;
+  o : Tobject;
+  s : string;
 begin
+  FOwner := nil;
   Classe := Contexto.GetType(Self.ClassType);
+  IF Self.InheritsFrom(THighchartsCustomPlotOptions) THEN
+  BEGIN
+     Classe := Contexto.GetType(THighchartsCustomPlotOptions);
+  END
+  else
+  IF Self.InheritsFrom(THighCustomLabel) THEN
+  BEGIN
+     Classe := Contexto.GetType(THighCustomLabel);
+  END
+  else
+  IF Self.InheritsFrom(TAxisOption) THEN
+  BEGIN
+     Classe := Contexto.GetType(TAxisOption);
+  END
+  else
+  BEGIN
+    Classe := Contexto.GetType(Self.ClassType);
+  END;
+
+
+
   for Field in Classe.GetDeclaredFields do
   BEGIN
-    IF (Field.Visibility in [TMemberVisibility.mvPublic,TMemberVisibility.mvPublic]) THEN
     BEGIN
 
-      if (Assigned(Field.FieldType.BaseType)) and (Field.FieldType.BaseType.Name = 'THighValue')  then
+
+      s := Field.FieldType.Name;
+
+      if s = 'THighAreaPlotOptions' then
       BEGIN
-        obj := THighValue(Field.GetValue(Self).AsObject);
-        if Assigned(obj) then
-        BEGIN
-          obj.Free;
-        END;
+        s := s;
       END;
+
+      if (Assigned(Field.FieldType.BaseType))  then
+      BEGIN
+        o := Field.GetValue(Self).AsObject;
+        if Assigned(o) and (o.InheritsFrom(THighValue) or o.InheritsFrom(THighChartMode)) then
+        BEGIN
+          o.Free;
+        END;
+
+      END;
+
+
+
+
+//      if (Assigned(Field.FieldType.BaseType)) and (Field.FieldType.BaseType.Name = 'THighValue')  then
+//      BEGIN
+//        obj := THighValue(Field.GetValue(Self).AsObject);
+//        if Assigned(obj) then
+//        BEGIN
+//          obj.Free;
+//        END;
+//      END
+//      else
+//      if (Assigned(Field.FieldType.BaseType)) and (Field.FieldType.Name = 'THighChartMode')  then
+//      BEGIN
+//        mode := THighChartMode(Field.GetValue(Self).AsObject);
+//        if Assigned(mode) then
+//        BEGIN
+//          mode.Free;
+//        END;
+//      END;
     END;
   END;
 end;
@@ -2925,8 +2996,8 @@ end;
 
 procedure THighValue.DestroyObjects;
 begin
-  //ChildList.Free;
   FreeChilds;
+  ChildList.Free;
 end;
 
 procedure THighValue.UpdateVariableNames;
@@ -3228,6 +3299,7 @@ begin
   FzIndex     := THighNumber.Create(Self);
 end;
 
+
 { THighChart3DPosition }
 
 function THighChart3DPosition.getValue: String;
@@ -3280,7 +3352,6 @@ begin
   Fy                  := THighNumber.Create(Self);
   FzIndex             := THighNumber.Create(Self);
 end;
-
 
 
 procedure THighCustomLabel.UpdateVariableNames;
@@ -3378,6 +3449,7 @@ begin
   Fwidth            := THighNumber.Create(Self);
   FzIndex           := THighNumber.Create(Self);
 end;
+
 
 { THighNumbers }
 
@@ -3510,6 +3582,7 @@ begin
   Fy                  := THighNumber.Create(Self);
 end;
 
+
 procedure THighLegend.InitializeObjects;
 begin
   inherited;
@@ -3621,6 +3694,7 @@ begin
   Fstyle          := THighGeneric.create(Self);
   Ftext           := THighString.create(Self);
 end;
+
 
 procedure THighCredits.InitializeObjects;
 begin
@@ -3869,6 +3943,12 @@ begin
   Frules  := THighResponsiveRules.Create(Self);
 end;
 
+procedure THighResponsiveOptions.DestroyObjects;
+begin
+  inherited;
+
+end;
+
 { THighResponsiveRulesConditions }
 
 procedure THighResponsiveRulesConditions.CreateObjects;
@@ -4114,6 +4194,13 @@ begin
   FList := THighchartSeries.Create(TSerie);
 end;
 
+
+procedure THighcartSeriesOptions.DestroyObjects;
+begin
+  inherited;
+  FDatasource.free;
+  FList.Free;
+end;
 
 procedure THighcartSeriesOptions.InitializeObjects;
 begin
@@ -4428,6 +4515,14 @@ begin
   FAxis.Add(TXAxisOption.Create(Self));
 end;
 
+
+
+procedure TArrayXAxisOption.DestroyObjects;
+begin
+  inherited;
+  FAxis.Free;
+end;
+
 function TArrayXAxisOption.getGenerate: Boolean;
 VAR
   i :  integer;
@@ -4609,6 +4704,14 @@ begin
   inherited;
   FAxis := TObjectList<TYAxisOption>.Create;
   FAxis.Add(TYAxisOption.Create(Self));
+end;
+
+
+procedure TArrayYAxisOption.DestroyObjects;
+begin
+  FAxis.Free;
+  inherited;
+
 end;
 
 function TArrayYAxisOption.getGenerate: Boolean;
